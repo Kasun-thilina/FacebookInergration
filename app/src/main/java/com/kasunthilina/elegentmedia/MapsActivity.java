@@ -1,7 +1,9 @@
 package com.kasunthilina.elegentmedia;
 
+import android.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,7 +15,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private static final String TAG = "MapsActivity";
+    private String longitude,latitude,address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +25,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        longitude=getIntent().getStringExtra("longitude");
+        latitude= getIntent().getStringExtra("latitude");
+        address=getIntent().getStringExtra("address");
+        Log.d(TAG, "long " +longitude );
+        Log.d(TAG, "long " +latitude );
+
     }
 
 
@@ -39,8 +49,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        mMap.addMarker(new MarkerOptions().position(location).title(address));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
     }
 }

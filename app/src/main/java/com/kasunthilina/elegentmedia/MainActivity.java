@@ -1,6 +1,7 @@
 package com.kasunthilina.elegentmedia;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,6 +23,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     final URL JSONURL=new URL("https://dl.dropboxusercontent.com/s/6nt7fkdt7ck0lue/hotels.json");
 
+    private Button btnLogOut;
     public MainActivity() throws MalformedURLException {
     }
 
@@ -61,9 +67,16 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = this.getSharedPreferences("UserData", Context.MODE_PRIVATE);
         String username = prefs.getString("username", null);
         etUserName.setText(username);
-
+        btnLogOut=findViewById(R.id.btnLogOut);
         parseJSON();
-
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FacebookSdk.sdkInitialize(getApplicationContext());
+                LoginManager.getInstance().logOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
     }
 
     private void parseJSON() {
@@ -75,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Do something with response
-                        //mTextView.setText(response.toString());
                         // Process the JSON
                         try{
                             // Get the JSON array
@@ -86,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                             for(int i=0;i<array.length();i++){
                                 // Get current json object
                                 JSONObject jsonObject = array.getJSONObject(i);
+                                //getting the image sub node
                                 JSONObject image = jsonObject.getJSONObject("image");
                                 Data data=new Data();
                                 data.setTitle(jsonObject.getString("title"));

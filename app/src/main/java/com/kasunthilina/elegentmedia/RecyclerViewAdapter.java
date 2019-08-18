@@ -1,6 +1,7 @@
 package com.kasunthilina.elegentmedia;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -51,6 +52,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked on: " + mData.get(i));
+                Intent intent = new Intent(mContext, MapsActivity.class);
+                intent.putExtra("longitude", mData.get(i).getLongitude());
+                intent.putExtra("latitude", mData.get(i).getLatitude());
+                intent.putExtra("address", mData.get(i).getAddress());
+                mContext.startActivity(intent);
             }
         });
     }
