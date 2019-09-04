@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         myViewHolder.tvTitle.setText(mData.get(i).getTitle());
-        myViewHolder.tvDescription.setText(mData.get(i).getDescription());
+        //myViewHolder.tvDescription.setText(mData.get(i).getDescription());
         myViewHolder.tvAddress.setText(mData.get(i).getAddress());
         myViewHolder.tvPostCode.setText(mData.get(i).getPostcode());
         myViewHolder.tvPhoneNo.setText(mData.get(i).getPhoneNumber());
@@ -52,10 +52,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked on: " + mData.get(i));
-                Intent intent = new Intent(mContext, MapsActivity.class);
+                Intent intent = new Intent(mContext, DetailsScreen.class);
                 intent.putExtra("longitude", mData.get(i).getLongitude());
                 intent.putExtra("latitude", mData.get(i).getLatitude());
                 intent.putExtra("address", mData.get(i).getAddress());
+                intent.putExtra("descripton", mData.get(i).getDescription());
+                intent.putExtra("heading", mData.get(i).getTitle());
+                intent.putExtra("image", mData.get(i).getImage());
                 mContext.startActivity(intent);
             }
         });
